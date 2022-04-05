@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+
+  mariadb:
+    image: mariadb:10.8.2
+    container_name: task_mariadb
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_USER=task_db
+      - MYSQL_DATABASE=task_db
+      - MYSQL_PASSWORD=task
+    ports:
+      - 9908:3306
+    volumes:
+      - mariadb_data:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: task_phpmyadmin
+    environment:
+      - PMA_HOST=task_mariadb
+      - UPLOAD_LIMIT=5242880000
+    ports:
+      - 9909:80
+volumes:
+  mariadb_data:
