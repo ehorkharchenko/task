@@ -1,4 +1,4 @@
-@extends('layouts.admin_layout')
+@extends('layouts.admin')
 
 @section('main_content')
 
@@ -28,8 +28,8 @@
                             document.getElementById('default-panel-{{$review->id}}').className += 'd-none';
                             ">Редактировать</button>
                 <button class="btn btn-danger"
-                        onclick="event.preventDefault(); document.getElementById('delete-review-form').submit();"> удалить </button>
-                <form class="d-none" id="delete-review-form" method="post" action="/dashboard/review/delete">
+                        onclick="event.preventDefault(); document.getElementById('delete-review-form-{{$review->id}}').submit();"> удалить </button>
+                <form class="d-none" id="delete-review-form-{{$review->id}}" method="post" action="/dashboard/review/delete">
                     @csrf
                     <input type="text" name="id" value="{{$review->id}}">
                 </form>
@@ -47,14 +47,15 @@
                 <button class="btn btn-primary"
                         onclick="
                             event.preventDefault();
+                            document.getElementById('hidden_review_id_{{$review->id}}').value = '{{$review->id}}';
                             document.getElementById('hidden_review_name_{{$review->id}}').value = document.getElementById('review_name_{{$review->id}}').value;
                             document.getElementById('hidden_review_email_{{$review->id}}').value = document.getElementById('review_email_{{$review->id}}').value;
                             document.getElementById('hidden_review_text_{{$review->id}}').value = document.getElementById('review_text_{{$review->id}}').value;
-                            document.getElementById('save-form').submit();
+                            document.getElementById('save-form-{{$review->id}}').submit();
                             "> сохранить </button>
-                <form class="d-none" id="save-form" action="/dashboard/review/edit">
+                <form class="d-none" id="save-form-{{$review->id}}" method="post" action="/dashboard/review/edit">
                     @csrf
-                    <input type="text" name="id" value="{{$review->id}}">
+                    <input id="hidden_review_id_{{$review->id}}" type="text" name="id">
                     <input id="hidden_review_name_{{$review->id}}" type="text" name="name">
                     <input id="hidden_review_email_{{$review->id}}" type="text" name="email">
                     <input id="hidden_review_text_{{$review->id}}" type="text" name="text">

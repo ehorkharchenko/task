@@ -8,6 +8,11 @@ use Illuminate\Http\Request;
 
 class StaffController extends Controller
 {
+    public function index() {
+
+        return view('admin.staff');
+    }
+
     public function appoint (Request $request) {
 
         $user = User::all()->where('email', $request->input('email') )->first();

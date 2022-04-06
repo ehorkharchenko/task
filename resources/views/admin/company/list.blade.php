@@ -1,4 +1,4 @@
-@extends('layouts.admin_layout')
+@extends('layouts.admin')
 
 @section('main_content')
 
@@ -14,7 +14,7 @@
                           style="height: 200px; resize: none;" id="company_description_{{$company->id}}" readonly>{{$company->description}}</textarea>
             </div>
             <div class="border-top pt-0 pb-0 p-3" id="default-panel-{{$company->id}}">
-                <a class="link-primary" href="/dashboard/company/id/{{$company->id}}"> отзывы о компании </a>
+                <a class="link-primary" href="/dashboard/company/{{$company->id}}"> отзывы о компании </a>
                 <button class="btn btn-warning m-2"
                         onclick="
                             document.getElementById('company_name_{{$company->id}}').removeAttribute('readonly');
@@ -25,8 +25,8 @@
 
                         ">Редактировать</button>
                 <button class="btn btn-danger m-2"
-                        onclick=" event.preventDefault(); document.getElementById('delete-company-form').submit() ">Удалить</button>
-                <form class="d-none" id="delete-company-form" method="post" action="/dashboard/company/delete">
+                        onclick=" event.preventDefault(); document.getElementById('delete-company-form-{{$company->id}}').submit() ">Удалить</button>
+                <form class="d-none" id="delete-company-form-{{$company->id}}" method="post" action="/dashboard/company/delete">
                     @csrf
                     <input type="text" name="id" value="{{$company->id}}">
                 </form>
@@ -44,13 +44,14 @@
                 <button class="btn btn-primary m-2"
                         onclick="
                             event.preventDefault();
+                            document.getElementById('hidden_company_id_{{$company->id}}').value = {{$company->id}};
                             document.getElementById('hidden_company_name_{{$company->id}}').value = document.getElementById('company_name_{{$company->id}}').value;
                             document.getElementById('hidden_company_description_{{$company->id}}').value = document.getElementById('company_description_{{$company->id}}').value;
-                            document.getElementById('save-form').submit();
+                            document.getElementById('save-form-{{$company->id}}').submit();
                         " type="submit"> сохранить </button>
-                <form class="d-none" id="save-form" method="post" action="/dashboard/company/edit">
+                <form class="d-none" id="save-form-{{$company->id}}" method="post" action="/dashboard/company/edit">
                     @csrf
-                    <input type="text" name="id" value="{{$company->id}}">
+                    <input type="text" name="id" id="hidden_company_id_{{$company->id}}">
                     <input type="text" name="name" id="hidden_company_name_{{$company->id}}">
                     <textarea name="description" id="hidden_company_description_{{$company->id}}"></textarea>
                 </form>
