@@ -15,5 +15,15 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         // \App\Models\User::factory(10)->create();
+        $user = User::create([
+           'name' => 'Task',
+           'email' => 'task@mail.io',
+           'password' => Hash::make('task'),
+        ]);
+
+        $user->assignRole('administrator');
+
+        $user->save();
+
     }
 }

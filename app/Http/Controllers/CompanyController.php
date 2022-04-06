@@ -7,37 +7,13 @@ use Illuminate\Http\Request;
 
 class CompanyController extends Controller
 {
-    public function create_company (Request $request) {
 
-        $company = new Company();
+    public function getCompanyReviews(Request $request, $id) {
 
-        $company->name = $request->input('name');
-        $company->description = $request->input('description');
+        $company = Company::all()->find($id);
+        $reviews = $company->reviews;
 
-        $company->save();
-
-        return redirect()->route('company-create');
+        return view('company', [ 'company' => $company, 'reviews' =>  $reviews, 'reviews_count' => $reviews->count() ]);
     }
 
-    public function delete_company (Request $request) {
-
-        Company::find( $request->input('id') )->delete();
-    }
-
-    public function edit_company (Request $request) {
-
-        $company = Company::find( $request->input('id') );
-
-        $company->name = $request->input('name');
-        $company->description = $request->input('description');
-
-        $company->save();
-    }
-
-    public function list () {
-
-        $companies = Company::all();
-
-        return view('admin.company.list', [ 'companies' => $companies ]);
-    }
 }

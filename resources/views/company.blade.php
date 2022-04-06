@@ -1,11 +1,11 @@
-@extends('layouts.basic_layout')
+@extends('layouts.basic')
 
 @section('content')
    <div class="d-grid mt-2 m-5">
        <h1>{{ $company->name }}</h1>
        <p class="w-50">{{ $company->description }}</p>
        <h2> Добавить отзыв </h2>
-       <form method="post" action="/review">
+       <form method="post" action="/review/add">
            @csrf
            @guest
            @else

@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,18 +16,17 @@ use Illuminate\Support\Facades\Route;
 Auth::routes();
 
 Route::get('/home', function () {
-   return redirect()->route('home');
+
+    return redirect()->route('home');
 });
+
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::middleware(['role:administrator|moderator'])->prefix('dashboard')->group( function () {
 
-    Route::get('/', [\App\Http\Controllers\Admin\HomeController::class, 'index']);
+    Route::get('/', [\App\Http\Controllers\Admin\HomeController::class, 'index'])->name('dashboard');
 
-    Route::middleware(['role:administrator'])->get('/staff', function () {
-
-        return view('admin.staff');
-    })->name('appoint-moderator');
+    Route::middleware(['role:administrator'])->get('/staff', [\App\Http\Controllers\Admin\StaffController::class, 'index'])->name('appoint-moderator');
 
     Route::post('/appoint-moderator', [\App\Http\Controllers\Admin\StaffController::class, 'appoint']);
 
@@ -36,33 +36,31 @@ Route::middleware(['role:administrator|moderator'])->prefix('dashboard')->group(
             return view('admin.company.create');
         })->name('company-create');
 
-        Route::get('/list', [\App\Http\Controllers\CompanyController::class, 'list'])->name('company-list');
+        Route::get('/list', [\App\Http\Controllers\Admin\CompanyController::class, 'getCompanies'])->name('company-list');
 
-        Route::get('/id/{id}', [\App\Http\Controllers\ReviewsController::class, 'list']);
+        Route::get('/{id}', [\App\Http\Controllers\Admin\CompanyController::class, 'getCompanyReviews'])->name('company-reviews-list');
 
-        Route::post('/create', [\App\Http\Controllers\CompanyController::class, 'create_company']);
+        Route::post('/create', [\App\Http\Controllers\Admin\CompanyController::class, 'createCompany']);
 
-        Route::post('/delete', [\App\Http\Controllers\CompanyController::class, 'delete_company']);
+        Route::post('/delete', [\App\Http\Controllers\Admin\CompanyController::class, 'deleteCompany']);
 
-        Route::post('/edit', [\App\Http\Controllers\CompanyController::class, 'edit_company']);
+        Route::post('/edit', [\App\Http\Controllers\Admin\CompanyController::class, 'editCompany']);
 
     });
 
     Route::prefix("review")->group( function () {
 
-        Route::get('/confirmation', [\App\Http\Controllers\ReviewsController::class, 'get_unconfirmed_reviews'])->name('review-confirmation');
+        Route::get('/confirmation', [\App\Http\Controllers\Admin\ReviewsController::class, 'getUnconfirmedReviews'])->name('review-unconfirmed');
 
-        Route::post('/confirm', [\App\Http\Controllers\ReviewsController::class, 'confirm_review']);
+        Route::post('/confirm', [\App\Http\Controllers\Admin\ReviewsController::class, 'confirmReview']);
 
-        Route::post('/delete', [\App\Http\Controllers\ReviewsController::class, 'remove_review']);
+        Route::post('/delete', [\App\Http\Controllers\Admin\ReviewsController::class, 'deleteReview']);
 
-        Route::post('/edit', [\App\Http\Controllers\ReviewsController::class, 'edit_review']);
+        Route::post('/edit', [\App\Http\Controllers\Admin\ReviewsController::class, 'editReview']);
 
-        Route::middleware(['role:administrator'])->get('/edit', function () {});
-        Route::middleware(['role:administrator'])->get('/delete', function () {});
     });
 
 });
 
-Route::get('/company/{id}', [\App\Http\Controllers\ReviewsController::class, 'reviews']);
-Route::post('/review', [\App\Http\Controllers\ReviewsController::class, 'add_review']);
+Route::get('/company/{id}', [\App\Http\Controllers\CompanyController::class, 'getCompanyReviews']);
+Route::post('/review/add', [\App\Http\Controllers\ReviewsController::class, 'addReview']);

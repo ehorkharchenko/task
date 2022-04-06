@@ -24,7 +24,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <!-- Sidebar -->
         <div class="sidebar">
             <a class="btn" href="{{ route('appoint-moderator') }}"> Назначить модератора </a>
-            <a class="btn" href="{{ route('review-confirmation') }}"> Не утвержденные отзывы </a>
+            <a class="btn" href="{{ route('review-unconfirmed') }}"> Не утвержденные отзывы </a>
             <nav class="mt-2">
                 <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                     <!-- Add icons to the links using the .nav-icon class

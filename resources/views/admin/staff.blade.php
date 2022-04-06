@@ -1,4 +1,4 @@
-@extends('layouts.admin_layout')
+@extends('layouts.admin')
 
 @section('main_content')
     <form method="post" action="/dashboard/appoint-moderator">
